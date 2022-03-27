@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
+import android.view.Menu;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 
@@ -14,13 +15,22 @@ public class ScreenshotActivity extends Activity {
   private MediaProjectionManager mediaManager;
   private static final int SCREENSHOT = 99999;
 
-  @Override
-  protected void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
 
-    mediaManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-    startActivityForResult(mediaManager.createScreenCaptureIntent(), SCREENSHOT);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_screenshot);
   }
+
+
+
+//  @Override
+//  protected void onCreate(@Nullable Bundle savedInstanceState) {
+//    super.onCreate(savedInstanceState);
+//
+//    mediaManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+//    startActivityForResult(mediaManager.createScreenCaptureIntent(), SCREENSHOT);
+//  }
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {

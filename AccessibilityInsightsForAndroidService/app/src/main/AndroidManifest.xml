@@ -41,7 +41,7 @@
         <activity
             android:name="com.microsoft.accessibilityinsightsforandroidservice.ScreenshotActivity"
             android:excludeFromRecents="true"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/accessibility_service_label" />
         <!--
         SET_DEBUG_APP is a privileged system permission which is only available to com.android.shell.

@@ -76,7 +76,7 @@ public class AccessibilityInsightsForAndroidService extends AccessibilityService
   protected void onServiceConnected() {
     Logger.logVerbose(TAG, "*** onServiceConnected");
 
-    this.startScreenshotActivity();
+
 
     AccessibilityServiceInfo info = new AccessibilityServiceInfo();
     info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
@@ -144,6 +144,9 @@ public class AccessibilityInsightsForAndroidService extends AccessibilityService
 
   @Override
   public void onAccessibilityEvent(AccessibilityEvent event) {
+
+    // debug for use 
+    //android.os.Debug.waitForDebugger();
     accessibilityEventDispatcher.onAccessibilityEvent(event, getRootInActiveWindow());
 
     // This logic ensures that we only track events from the active window, as
@@ -161,7 +164,17 @@ public class AccessibilityInsightsForAndroidService extends AccessibilityService
     if (activeWindowId == windowId) {
       eventHelper.recordEvent(getRootInActiveWindow());
     }
-  }
+    if(event.getPackageName()!=null && event.getPackageName().toString().contains("twitter")) {
+
+      Logger.logVerbose(TAG, "receive twitter event:" + event);
+
+      this.startScreenshotActivity();
+
+    }else{
+      Logger.logVerbose(TAG, "receive event:" + event);
+
+    }
+    }
 
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
