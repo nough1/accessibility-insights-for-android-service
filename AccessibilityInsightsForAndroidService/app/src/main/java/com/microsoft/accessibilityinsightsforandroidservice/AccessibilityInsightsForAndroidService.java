@@ -145,7 +145,7 @@ public class AccessibilityInsightsForAndroidService extends AccessibilityService
   @Override
   public void onAccessibilityEvent(AccessibilityEvent event) {
 
-    // debug for use 
+    // debug for use
     //android.os.Debug.waitForDebugger();
     accessibilityEventDispatcher.onAccessibilityEvent(event, getRootInActiveWindow());
 
@@ -171,9 +171,61 @@ public class AccessibilityInsightsForAndroidService extends AccessibilityService
       this.startScreenshotActivity();
 
     }else{
-      Logger.logVerbose(TAG, "receive event:" + event);
+
+      if(event.getPackageName()==null ||
+              (event.getPackageName().toString().contains("com.huawei.intelligent")||
+                      (event.getPackageName().toString().contains("com.android.systemui"))
+              ||(event.getPackageName().toString().contains("com.huawei.android.launcher")
+                      ))){
+        Logger.logVerbose(TAG, "not intercept event :" + event);
+      }else {
+        if(event.getPackageName().toString().contains("accessibilityinsightsforandroidservice")) {
+          this.startScreenshotActivity();
+          Logger.logVerbose(TAG, "receive event:" + event);
+        }else{
+
+          if(interceptCleanSettings(event)){
+            this.startScreenshotActivity();
+            Logger.logVerbose(TAG, "receive event:" + event);
+          }else {
+            Logger.logVerbose(TAG, "not intercept event:" + event);
+          }
+        }
+
+      }
 
     }
+    }
+
+  /**
+   * 当用户想要关闭 accessibility 的时候，需要拦截 
+   * @param event
+   * @return
+   */
+    public boolean interceptCleanSettings(AccessibilityEvent event){
+
+      if(event.getPackageName()==null){
+        return false;
+      }
+      if(event.getClassName()==null){
+        return false;
+      }
+
+      if(event.getClassName().toString().contains("com.android.settings.CleanSubSettings")){
+
+        Logger.logVerbose(TAG,"needIntercept:"+event);
+        if(event.getText()==null){
+          return false;
+        }
+        for(CharSequence charSequence:event.getText()){
+
+          if(charSequence.toString().contains("注意力守护神0.1")){
+            return true ;
+          }
+        }
+      }
+
+      return false;
     }
 
   @Override
